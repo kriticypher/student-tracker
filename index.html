@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduPulse | Student Engagement Dashboard</title>
+    <title>EduPulse | Personal Instructor System</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js 4.4 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -14,152 +13,393 @@
     <div class="app">
         <!-- Sidebar -->
         <nav class="sidebar">
-            <div class="logo">
-                <i data-lucide="graduation-cap"></i>
-                <span>EduPulse</span>
+            <div class="sidebar-top">
+                <div class="logo">
+                    <span class="logo-text">EduPulse</span>
+                    <span class="logo-sub">Personal Instructor System</span>
+                </div>
+                <ul class="nav-links">
+                    <li class="active" data-view="dashboard">
+                        <div class="nav-icon"><i data-lucide="layout-dashboard"></i></div>
+                        <span>Overview Dashboard</span>
+                    </li>
+                    <li data-view="mystudents">
+                        <div class="nav-icon"><i data-lucide="users"></i></div>
+                        <span>My Students</span>
+                    </li>
+                    <li data-view="alerts">
+                        <div class="nav-icon"><i data-lucide="alert-triangle"></i></div>
+                        <span>At-Risk Alerts</span>
+                    </li>
+                    <li data-view="attendance">
+                        <div class="nav-icon"><i data-lucide="calendar-check"></i></div>
+                        <span>Attendance</span>
+                    </li>
+                    <li data-view="analytics">
+                        <div class="nav-icon"><i data-lucide="bar-chart-2"></i></div>
+                        <span>Performance Analytics</span>
+                    </li>
+                    <li data-view="meetings">
+                        <div class="nav-icon"><i data-lucide="calendar"></i></div>
+                        <span>Meetings & Check-ins</span>
+                    </li>
+                    <li data-view="insights">
+                        <div class="nav-icon"><i data-lucide="brain"></i></div>
+                        <span>Deep Insights</span>
+                    </li>
+                    <li data-view="reports">
+                        <div class="nav-icon"><i data-lucide="file-text"></i></div>
+                        <span>Reports</span>
+                    </li>
+                    <li data-view="messages">
+                        <div class="nav-icon"><i data-lucide="message-square"></i></div>
+                        <span>Messages</span>
+                    </li>
+                    <li data-view="add-student">
+                        <div class="nav-icon"><i data-lucide="user-plus"></i></div>
+                        <span>Add Students</span>
+                    </li>
+                    <li data-view="settings">
+                        <div class="nav-icon"><i data-lucide="settings"></i></div>
+                        <span>Settings</span>
+                    </li>
+                </ul>
             </div>
-            <ul class="nav-links">
-                <li class="active" data-view="dashboard">
-                    <i data-lucide="layout-dashboard"></i> Overview
-                </li>
-                <li data-view="roster">
-                    <i data-lucide="users"></i> Student Roster
-                </li>
-                <li data-view="alerts">
-                    <i data-lucide="alert-triangle"></i> At-Risk Alerts
-                    <span class="badge" id="alert-badge">0</span>
-                </li>
-                <li data-view="add-student">
-                    <i data-lucide="user-plus"></i> Add Student
-                </li>
-            </ul>
+            
+            <div class="sidebar-bottom">
+                <div class="profile-card clickable" id="pi-profile-btn" style="cursor: pointer; padding: 12px; border-radius: 8px; transition: background 0.2s;">
+                    <div class="profile-header" style="margin-bottom: 0;">
+                        <div class="profile-avatar">AT</div>
+                        <div class="profile-info-main">
+                            <div class="profile-name">Ms. Ayushi Tangnoo</div>
+                            <div class="profile-role">Personal Instructor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nav>
 
         <!-- Main Content -->
         <main class="main-content">
             <header class="header">
-                <h1 id="page-title">Class Overview</h1>
+                <div class="header-breadcrumb" id="breadcrumb">Overview Dashboard</div>
                 <div class="header-actions">
-                    <button class="btn btn-outline" id="export-csv">
-                        <i data-lucide="download"></i> Export CSV
+                    <button class="btn btn-icon" id="theme-toggle" title="Toggle Theme">
+                        <i data-lucide="sun"></i>
                     </button>
                 </div>
             </header>
 
             <div class="content-wrapper">
-                <!-- Dashboard View -->
+                
+                <!-- 1. Overview Dashboard -->
                 <section id="view-dashboard" class="view active">
+                    <div class="view-header">
+                        <h2>Overview <span>Dashboard</span></h2>
+                        <p>High-level summary of your assigned batch</p>
+                    </div>
                     <div class="kpi-grid">
                         <div class="kpi-card">
-                            <h3>Average Engagement</h3>
-                            <div class="kpi-value" id="kpi-avg-score">--</div>
+                            <h3>Total Students</h3>
+                            <div class="kpi-value" id="kpi-total">0</div>
                         </div>
                         <div class="kpi-card">
-                            <h3>Total Students</h3>
-                            <div class="kpi-value" id="kpi-total-students">--</div>
+                            <h3>Avg Class Attendance</h3>
+                            <div class="kpi-value" id="kpi-attendance">0%</div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3>Avg Academic Score</h3>
+                            <div class="kpi-value" id="kpi-score">0/100</div>
                         </div>
                         <div class="kpi-card alert-kpi">
                             <h3>At-Risk Students</h3>
-                            <div class="kpi-value" id="kpi-at-risk">--</div>
+                            <div class="kpi-value" id="kpi-risk">0</div>
                         </div>
                     </div>
-
                     <div class="charts-grid">
                         <div class="chart-card">
-                            <h3>Engagement Distribution</h3>
-                            <canvas id="distChart"></canvas>
+                            <h3>Overall Performance Distribution</h3>
+                            <div class="chart-container"><canvas id="distChart"></canvas></div>
                         </div>
                         <div class="chart-card">
-                            <h3>Participation vs Quiz Score</h3>
-                            <canvas id="scatterChart"></canvas>
-                        </div>
-                        <div class="chart-card">
-                            <h3>Sentiment Breakdown</h3>
-                            <canvas id="sentimentChart"></canvas>
-                        </div>
-                        <div class="chart-card">
-                            <h3>Class Averages</h3>
-                            <canvas id="barChart"></canvas>
+                            <h3>Attendance vs Performance</h3>
+                            <div class="chart-container"><canvas id="scatterChart"></canvas></div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Roster View -->
-                <section id="view-roster" class="view">
-                    <div class="table-controls">
+                <!-- 2. My Students -->
+                <section id="view-mystudents" class="view">
+                    <div class="view-header">
+                        <h2>My <span>Students</span></h2>
+                        <p>Manage and monitor your assigned batch</p>
+                    </div>
+                    <div class="filter-bar">
                         <div class="search-box">
                             <i data-lucide="search"></i>
-                            <input type="text" id="search-input" placeholder="Search students...">
+                            <input type="text" id="student-search" placeholder="Search by name or roll no...">
                         </div>
-                        <select id="filter-select" class="filter-select">
-                            <option value="all">All Engagement Levels</option>
-                            <option value="high">High Engagement (≥75)</option>
-                            <option value="medium">Medium Engagement (50-74)</option>
-                            <option value="low">Low Engagement (&lt;50)</option>
-                        </select>
+                        <div class="filter-chips">
+                            <button class="filter-chip active" data-filter="all">All</button>
+                            <button class="filter-chip" data-filter="high">High Performers</button>
+                            <button class="filter-chip danger" data-filter="risk">At-Risk</button>
+                        </div>
                     </div>
+                    <div class="students-grid" id="students-grid"></div>
+                </section>
 
+                <!-- 3. At-Risk Alerts -->
+                <section id="view-alerts" class="view">
+                    <div class="view-header">
+                        <h2>At-Risk <span>Alerts</span></h2>
+                        <p>Students requiring immediate attention</p>
+                    </div>
+                    <div class="at-risk-stats">
+                        <div class="stat-box alert-critical">
+                            <span class="stat-number" id="alert-kpi-critical">0</span>
+                            <span class="stat-label">Critical (Score &lt; 50)</span>
+                        </div>
+                        <div class="stat-box alert-warning">
+                            <span class="stat-number" id="alert-kpi-attendance">0</span>
+                            <span class="stat-label">Low Attendance (&lt; 75%)</span>
+                        </div>
+                    </div>
+                    <div class="alerts-grid" id="alerts-container"></div>
+                </section>
+
+                <!-- 4. Attendance -->
+                <section id="view-attendance" class="view">
+                    <div class="view-header">
+                        <h2>Attendance <span>Tracker</span></h2>
+                        <p>Subject-wise attendance details. Changes sync globally.</p>
+                    </div>
                     <div class="table-container">
-                        <table class="data-table">
-                            <thead>
+                        <table class="data-table" id="attendance-table">
+                            <thead id="attendance-thead">
                                 <tr>
                                     <th>Student Name</th>
-                                    <th>Participation (40%)</th>
-                                    <th>Quiz (40%)</th>
-                                    <th>Sentiment (20%)</th>
-                                    <th>Score</th>
-                                    <th>Status</th>
+                                    <th>Overall %</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="student-tbody">
-                                <!-- Rendered dynamically -->
-                            </tbody>
+                            <tbody id="attendance-tbody"></tbody>
                         </table>
                     </div>
                 </section>
 
-                <!-- Alerts View -->
-                <section id="view-alerts" class="view">
-                    <div class="alerts-container" id="alerts-container">
-                        <!-- Rendered dynamically -->
+                <!-- 5. Performance Analytics -->
+                <section id="view-analytics" class="view">
+                    <div class="view-header">
+                        <h2>Performance <span>Analytics</span></h2>
+                        <p>Deep dive into class performance across subjects.</p>
+                    </div>
+                    <div class="chart-card" style="height: 400px;">
+                        <h3>Class Subject Averages</h3>
+                        <div class="chart-container"><canvas id="analyticsChart"></canvas></div>
                     </div>
                 </section>
 
-                <!-- Add Student form -->
+                <!-- 6. Meetings -->
+                <section id="view-meetings" class="view">
+                    <div class="view-header">
+                        <h2>Meetings & <span>Check-ins</span></h2>
+                        <p>Log of all instructor interventions.</p>
+                    </div>
+                    <div class="timeline" id="meetings-list"></div>
+                </section>
+
+                <!-- 7. Deep Insights -->
+                <section id="view-insights" class="view">
+                    <div class="view-header">
+                        <h2>Deep <span>Insights</span> <span class="ai-badge"><i data-lucide="sparkles"></i> AI-DRIVEN</span></h2>
+                        <p>Behavioral patterns, anomalies, and hidden risks dynamically generated from data.</p>
+                    </div>
+                    <div class="insights-container">
+                        <div class="insight-column critical-column" id="insights-critical">
+                            <h3 class="column-title"><i data-lucide="alert-circle"></i> Critical Alerts</h3>
+                        </div>
+                        <div class="insight-column behavioral-column" id="insights-behavioral">
+                            <h3 class="column-title"><i data-lucide="user-minus"></i> Behavioral</h3>
+                        </div>
+                        <div class="insight-column academic-column" id="insights-academic">
+                            <h3 class="column-title"><i data-lucide="book-open"></i> Academic</h3>
+                        </div>
+                        <div class="insight-column positive-column" id="insights-positive">
+                            <h3 class="column-title"><i data-lucide="trending-up"></i> Positive</h3>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. Reports -->
+                <section id="view-reports" class="view">
+                    <div class="view-header">
+                        <h2>Reports <span>& Export</span></h2>
+                        <p>Generate detailed summaries of the batch.</p>
+                    </div>
+                    <div class="sp-card">
+                        <h3>Export System Data</h3>
+                        <p style="margin-bottom: 16px; color: var(--text-muted);">Download a complete CSV dump of all students, scores, and attendance.</p>
+                        <button class="btn btn-primary" id="btn-export-csv"><i data-lucide="download"></i> Export to CSV</button>
+                    </div>
+                </section>
+
+                <!-- 10. Messages -->
+                <section id="view-messages" class="view">
+                    <div class="view-header">
+                        <h2>Messages <span>& Comms</span></h2>
+                        <p>Chat with students directly.</p>
+                    </div>
+                    <div class="messages-layout">
+                        <div class="msg-sidebar" id="msg-student-list"></div>
+                        <div class="msg-area" id="msg-area">
+                            <div class="msg-placeholder">Select a student to start messaging</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 11. Add Students -->
                 <section id="view-add-student" class="view">
-                    <div class="form-card">
-                        <h2>Add New Student Data</h2>
-                        <form id="add-student-form">
+                    <div class="view-header">
+                        <h2>Add <span>Students</span></h2>
+                        <p>Enroll new students into the global batch system.</p>
+                    </div>
+                    <div class="sp-card" style="max-width: 600px;">
+                        <form id="global-add-student-form">
                             <div class="form-group">
-                                <label>Student Name</label>
-                                <input type="text" id="form-name" required>
+                                <label>Full Name</label>
+                                <input type="text" id="add-name" required>
                             </div>
                             <div class="form-group">
-                                <label>Participation Score (0-100)</label>
-                                <input type="number" id="form-participation" min="0" max="100" required>
+                                <label>Roll Number</label>
+                                <input type="text" id="add-roll" required>
                             </div>
                             <div class="form-group">
-                                <label>Average Quiz Score (0-100)</label>
-                                <input type="number" id="form-quiz" min="0" max="100" required>
+                                <label>Batch</label>
+                                <input type="text" id="add-batch" value="2026" required>
                             </div>
-                            <div class="form-group">
-                                <label>Overall Sentiment</label>
-                                <select id="form-sentiment" required>
-                                    <option value="positive">Positive</option>
-                                    <option value="neutral">Neutral</option>
-                                    <option value="negative">Negative</option>
-                                </select>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                                <div class="form-group">
+                                    <label>Initial Score (0-100)</label>
+                                    <input type="number" id="add-score" min="0" max="100" value="70" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Initial Attendance (%)</label>
+                                    <input type="number" id="add-att" min="0" max="100" value="80" required>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Weekly Trend</label>
-                                <select id="form-trend" required>
-                                    <option value="improving">Improving</option>
-                                    <option value="stable">Stable</option>
-                                    <option value="declining">Declining</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Student</button>
+                            <button type="submit" class="btn btn-primary" style="margin-top:16px;"><i data-lucide="plus"></i> Add to System</button>
                         </form>
+                    </div>
+                </section>
+
+                <!-- 12. Settings -->
+                <section id="view-settings" class="view">
+                    <div class="view-header">
+                        <h2>System <span>Settings</span></h2>
+                        <p>Configure risk thresholds for the AI rule engine.</p>
+                    </div>
+                    <div class="sp-card" style="max-width: 500px;">
+                        <form id="settings-form">
+                            <div class="form-group">
+                                <label>Critical Score Threshold (Default 50)</label>
+                                <input type="number" id="set-score" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Warning Attendance Threshold (Default 75%)</label>
+                                <input type="number" id="set-att" min="0" max="100">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="alert('Settings Saved!');" style="margin-top:16px;">Save Settings</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- PI Profile View -->
+                <section id="view-pi-profile" class="view">
+                    <div class="view-header">
+                        <h2>Instructor <span>Profile</span></h2>
+                        <p>Your details and assigned responsibilities.</p>
+                    </div>
+                    <div class="sp-card" style="max-width: 600px;">
+                        <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border);">
+                            <div class="sp-avatar" style="width: 100px; height: 100px; font-size: 2.5rem;">AT</div>
+                            <div>
+                                <h2 style="font-size: 1.8rem; color: var(--text-main); margin-bottom: 8px;">Ms. Ayushi Tangnoo</h2>
+                                <p style="color: var(--primary); font-weight: 600;">Senior Personal Instructor</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--input-bg); display: flex; align-items: center; justify-content: center; color: var(--text-muted);"><i data-lucide="book-open"></i></div>
+                                <div><p style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Department</p><p style="font-weight: 500; color: var(--text-main);">Computer Science Engineering</p></div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--input-bg); display: flex; align-items: center; justify-content: center; color: var(--text-muted);"><i data-lucide="users"></i></div>
+                                <div><p style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Assigned Batch</p><p style="font-weight: 500; color: var(--text-main);">Hopper (Compiler & Debugger)</p></div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--input-bg); display: flex; align-items: center; justify-content: center; color: var(--text-muted);"><i data-lucide="clock"></i></div>
+                                <div><p style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Office Hours</p><p style="font-weight: 500; color: var(--text-main);">Monday to Friday, 10:00 AM - 6:30 PM</p></div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--input-bg); display: flex; align-items: center; justify-content: center; color: var(--text-muted);"><i data-lucide="mail"></i></div>
+                                <div><p style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Contact Email</p><p style="font-weight: 500; color: var(--text-main);">j.doe@college.edu</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Student Profile Full Page (Hidden by default) -->
+                <section id="view-student-profile" class="view">
+                    <div class="profile-header-actions">
+                        <button class="btn btn-outline" id="back-to-students"><i data-lucide="arrow-left"></i> Back to List</button>
+                        <div class="profile-actions-right">
+                            <button class="btn btn-outline danger" id="btn-sp-remove" style="color: var(--low); border-color: var(--low);"><i data-lucide="trash-2"></i> Remove</button>
+                            <button class="btn btn-outline" id="btn-sp-msg"><i data-lucide="message-square"></i> Message</button>
+                            <button class="btn btn-primary" id="btn-sp-meeting"><i data-lucide="calendar"></i> Schedule Meeting</button>
+                        </div>
+                    </div>
+
+                    <div class="sp-layout">
+                        <!-- Left Column -->
+                        <div class="sp-left">
+                            <div class="sp-card basic-info-card">
+                                <div class="sp-avatar" id="sp-avatar">S</div>
+                                <h2 id="sp-name">Student Name</h2>
+                                <p class="sp-roll" id="sp-roll">Roll No: CS-2026-001</p>
+                                <div class="sp-tags" id="sp-tags"></div>
+                            </div>
+                            
+                            <div class="sp-card risk-card" id="sp-risk-card">
+                                <h3>Risk Analysis</h3>
+                                <div class="risk-reasons" id="sp-risk-reasons"></div>
+                            </div>
+
+                            <div class="sp-card attendance-card">
+                                <h3>Attendance Overview</h3>
+                                <div class="att-circle" id="sp-att-circle">
+                                    <h2 id="sp-att-total">85%</h2>
+                                    <span>Overall</span>
+                                </div>
+                                <div class="att-subjects" id="sp-att-subjects"></div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="sp-right">
+                            <div class="sp-card performance-card">
+                                <h3>Academic Performance</h3>
+                                <div class="perf-stats">
+                                    <div class="p-stat"><span>Current Score</span><strong id="sp-score-current">88/100</strong></div>
+                                    <div class="p-stat"><span>Class Average</span><strong id="sp-class-avg">76/100</strong></div>
+                                </div>
+                                <div class="chart-container" style="height: 250px; margin-top: 16px;"><canvas id="sp-trendChart"></canvas></div>
+                            </div>
+
+                            <div class="sp-card history-card">
+                                <h3>Action History</h3>
+                                <div class="timeline" id="sp-timeline"></div>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -169,3 +409,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+<!-- Added by Xaan -->
