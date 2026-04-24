@@ -3,32 +3,62 @@ const AppState = {
         { 
             id: 1, rollNo: "CS-2026-001", name: "Aarav Mehta", batch: "2026",
             score: 88, attendanceTotal: 92,
-            subjects: { "Math": 90, "Physics": 85, "CS": 95 },
-            attSubjects: { "Math": 95, "Physics": 90, "CS": 92 },
+            subjects: { "Maths": 90, "DSA": 85, "WAP": 95, "FOAI": 92 },
+            attSubjects: { "Maths": 95, "DSA": 90, "WAP": 92, "FOAI": 88 },
             feedback: ["Concepts are clear", "Active participation"],
             piNotes: "Aarav is doing excellently. No intervention needed.",
             history: [{ date: "2026-10-10", type: "meeting", note: "Term 1 Review - Excellent" }],
-            messages: [{ sender: "PI", text: "Great job on the latest assignment!" }, { sender: "Student", text: "Thank you!" }]
+            messages: [{ sender: "PI", text: "Great job on the latest assignment!" }, { sender: "Student", text: "Thank you!" }],
+            contestResults: [
+                { week: 1, subject: "Maths", score: 85 },
+                { week: 1, subject: "DSA", score: 90 },
+                { week: 1, subject: "WAP", score: 92 },
+                { week: 1, subject: "FOAI", score: 88 },
+                { week: 2, subject: "Maths", score: 88 },
+                { week: 2, subject: "DSA", score: 85 },
+                { week: 2, subject: "WAP", score: 95 },
+                { week: 2, subject: "FOAI", score: 90 }
+            ]
         },
         { 
             id: 2, rollNo: "CS-2026-002", name: "Priya Sharma", batch: "2026",
             score: 76, attendanceTotal: 85,
-            subjects: { "Math": 70, "Physics": 80, "CS": 78 },
-            attSubjects: { "Math": 80, "Physics": 85, "CS": 90 },
-            feedback: ["Needs more practice in Math"],
+            subjects: { "Maths": 70, "DSA": 80, "WAP": 78, "FOAI": 75 },
+            attSubjects: { "Maths": 80, "DSA": 85, "WAP": 90, "FOAI": 82 },
+            feedback: ["Needs more practice in Maths"],
             piNotes: "Priya is consistent but struggles slightly with advanced calculus.",
-            history: [{ date: "2026-10-12", type: "meeting", note: "Discussed Math progress" }],
-            messages: []
+            history: [{ date: "2026-10-12", type: "meeting", note: "Discussed Maths progress" }],
+            messages: [],
+            contestResults: [
+                { week: 1, subject: "Maths", score: 72 },
+                { week: 1, subject: "DSA", score: 78 },
+                { week: 1, subject: "WAP", score: 75 },
+                { week: 1, subject: "FOAI", score: 70 },
+                { week: 2, subject: "Maths", score: 70 },
+                { week: 2, subject: "DSA", score: 80 },
+                { week: 2, subject: "WAP", score: 78 },
+                { week: 2, subject: "FOAI", score: 75 }
+            ]
         },
         { 
             id: 3, rollNo: "CS-2026-003", name: "Liam Carter", batch: "2026",
             score: 42, attendanceTotal: 60,
-            subjects: { "Math": 40, "Physics": 35, "CS": 50 },
-            attSubjects: { "Math": 55, "Physics": 60, "CS": 65 },
+            subjects: { "Maths": 40, "DSA": 35, "WAP": 50, "FOAI": 45 },
+            attSubjects: { "Maths": 55, "DSA": 60, "WAP": 65, "FOAI": 58 },
             feedback: ["Did not understand concepts", "Lack of preparation"],
             piNotes: "Liam has been absent frequently. Seems disengaged.",
             history: [{ date: "2026-10-18", type: "missed", note: "Missed scheduled 1:1 check-in" }],
-            messages: [{ sender: "PI", text: "Liam, please see me after class." }, { sender: "Student", text: "OK" }]
+            messages: [{ sender: "PI", text: "Liam, please see me after class." }, { sender: "Student", text: "OK" }],
+            contestResults: [
+                { week: 1, subject: "Maths", score: 45 },
+                { week: 1, subject: "DSA", score: 38 },
+                { week: 1, subject: "WAP", score: 42 },
+                { week: 1, subject: "FOAI", score: 40 },
+                { week: 2, subject: "Maths", score: 40 },
+                { week: 2, subject: "DSA", score: 35 },
+                { week: 2, subject: "WAP", score: 48 },
+                { week: 2, subject: "FOAI", score: 42 }
+            ]
         }
     ],
     settings: {
@@ -69,12 +99,13 @@ const AppState = {
         this.students.push({
             id: newId, name, rollNo, batch,
             score: initScore, attendanceTotal: initAtt,
-            subjects: { "Math": initScore, "Physics": initScore, "CS": initScore },
-            attSubjects: { "Math": initAtt, "Physics": initAtt, "CS": initAtt },
+            subjects: { "Maths": initScore, "DSA": initScore, "WAP": initScore, "FOAI": initScore },
+            attSubjects: { "Maths": initAtt, "DSA": initAtt, "WAP": initAtt, "FOAI": initAtt },
             feedback: ["New student added to system"],
             piNotes: "Initial evaluation pending.",
             history: [{ date: new Date().toISOString().split('T')[0], type: "system", note: "Student enrolled in system." }],
-            messages: []
+            messages: [],
+            contestResults: []
         });
         refreshApp();
     },
@@ -320,7 +351,7 @@ function renderAttendance() {
     if(!tbody || !thead) return;
 
     // Get subjects from first student (assuming uniform subjects for now)
-    const allSubjects = AppState.students.length > 0 ? Object.keys(AppState.students[0].attSubjects) : ["Math", "Physics", "CS"];
+    const allSubjects = AppState.students.length > 0 ? Object.keys(AppState.students[0].attSubjects) : ["Maths", "DSA", "WAP", "FOAI"];
 
     // Dynamic Header
     thead.innerHTML = `
@@ -515,7 +546,66 @@ function openStudentProfile(student) {
     };
 
     lucide.createIcons();
+    renderContestResults(student);
     setTimeout(() => initStudentChart(student), 100);
+}
+
+function renderContestResults(student) {
+    const tableBody = document.getElementById('sp-contest-tbody');
+    const groupedContainer = document.getElementById('sp-contest-grouped');
+    if(!tableBody || !groupedContainer) return;
+
+    const results = student.contestResults || [];
+
+    // Render Table
+    if (results.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: var(--text-muted);">No contest data available</td></tr>';
+        groupedContainer.innerHTML = '<div style="color: var(--text-muted);">No data available for subject-wise grouping.</div>';
+        return;
+    }
+
+    tableBody.innerHTML = results.map(r => `
+        <tr>
+            <td style="font-weight: 500;">Week ${r.week}</td>
+            <td>${r.subject}</td>
+            <td><strong style="color: ${r.score < 50 ? 'var(--low)' : 'var(--high)'};">${r.score}</strong></td>
+        </tr>
+    `).join('');
+
+    // Render Grouped View
+    const grouped = {};
+    results.forEach(r => {
+        if (!grouped[r.subject]) grouped[r.subject] = [];
+        grouped[r.subject].push(r);
+    });
+
+    groupedContainer.innerHTML = '';
+    for (const subject in grouped) {
+        const subResults = grouped[subject];
+        const avg = Math.round(subResults.reduce((a, b) => a + b.score, 0) / subResults.length);
+        const latest = subResults[subResults.length - 1].score;
+        
+        const subCard = document.createElement('div');
+        subCard.className = 'contest-sub-card';
+        subCard.innerHTML = `
+            <div class="csc-header">
+                <h4>${subject}</h4>
+                <span class="csc-avg">Avg: ${avg}</span>
+            </div>
+            <div class="csc-scores">
+                ${subResults.map(r => `
+                    <div class="csc-score-item">
+                        <span class="csc-week">W${r.week}</span>
+                        <span class="csc-val">${r.score}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="csc-footer">
+                Latest Score: <strong style="color: ${latest < 50 ? 'var(--low)' : 'var(--high)'};">${latest}</strong>
+            </div>
+        `;
+        groupedContainer.appendChild(subCard);
+    }
 }
 
 function initStudentChart(student) {
