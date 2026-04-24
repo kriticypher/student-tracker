@@ -104,7 +104,7 @@ body { font-family: 'Inter', sans-serif; background-color: var(--bg-app); color:
 .btn-icon { padding: 8px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
 .btn-icon:hover { background: var(--bg-card); color: var(--text-main); }
 
-.content-wrapper { padding: 32px; max-width: 1400px; margin: 0 auto; width: 100%; }
+.content-wrapper { padding: 32px; width: 100%; }
 
 /* Views */
 .view { display: none; }
@@ -280,3 +280,129 @@ canvas { width: 100% !important; height: 100% !important; }
 
 /* Table specific inputs */
 .att-input { width: 70px; padding: 6px; border-radius: 4px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text-main); text-align: center; }
+
+/* Weekly Contest Tracker */
+.contest-card {
+    width: 100% !important;
+    margin-top: 32px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 16px !important;
+    background: var(--bg-card) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important;
+    position: relative;
+    z-index: 5;
+    overflow: hidden;
+    padding: 32px !important; /* Increased padding */
+}
+
+.contest-card h3 {
+    font-size: 1.3rem !important; /* Larger header */
+}
+
+.contest-card .table-container {
+    max-height: 400px !important; /* Increased height for more visibility */
+}
+
+.contest-card .data-table {
+    font-size: 0.95rem !important; /* Slightly larger table text */
+}
+
+.contest-grouped-grid {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 20px !important;
+    width: 100% !important;
+}
+
+.contest-sub-card {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+
+.contest-sub-card {
+    background: var(--input-bg);
+    border-radius: 12px;
+    padding: 20px; /* Increased padding */
+    border: 1px solid var(--border);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contest-sub-card h4 {
+    font-size: 1.1rem; /* Larger subject name */
+}
+
+.contest-sub-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-color: var(--primary);
+}
+
+.csc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+}
+
+.csc-header h4 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1rem;
+}
+
+.csc-avg {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg-main);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.csc-scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.csc-score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg-main);
+    padding: 6px;
+    border-radius: 8px;
+    min-width: 40px;
+}
+
+.csc-week {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.csc-val {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.csc-footer {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    text-align: right;
+}
+
+.btn.active {
+    background: var(--primary);
+    color: white !important;
+    border-color: var(--primary);
+}

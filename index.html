@@ -399,6 +399,35 @@
                                 <h3>Action History</h3>
                                 <div class="timeline" id="sp-timeline"></div>
                             </div>
+                        </div> <!-- End sp-right -->
+                    </div> <!-- End sp-layout -->
+
+                    <div class="sp-card contest-card" style="margin-top: 24px;">
+                        <div class="contest-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0;">Weekly Contest Results</h3>
+                            <div class="contest-tabs" style="display: flex; gap: 8px;">
+                                <button class="btn btn-outline btn-sm" style="padding: 4px 8px; font-size: 0.75rem;" onclick="this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active')); this.classList.add('active'); document.getElementById('sp-contest-table-view').style.display='block'; document.getElementById('sp-contest-grouped-view').style.display='none';">Table</button>
+                                <button class="btn btn-outline btn-sm active" style="padding: 4px 8px; font-size: 0.75rem;" onclick="this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active')); this.classList.add('active'); document.getElementById('sp-contest-table-view').style.display='none'; document.getElementById('sp-contest-grouped-view').style.display='block';">Grouped</button>
+                            </div>
+                        </div>
+                        
+                        <div id="sp-contest-table-view" style="display: none;">
+                            <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Week #</th>
+                                            <th>Subject</th>
+                                            <th>Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sp-contest-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="sp-contest-grouped-view">
+                            <div class="contest-grouped-grid" id="sp-contest-grouped"></div>
                         </div>
                     </div>
                 </section>
